@@ -18,7 +18,6 @@ class InitGame:
 
     def addPlayer(self, player):
         self.player = player
-
     def getPlater(self):
         return self.player
 
@@ -27,7 +26,6 @@ class InitGame:
         if self.animalContainer.getRootNode() == None:
             self.animalContainer.initRoot()
         return self.animalContainer.getRootNode()
-
     def setRootAnimal(self, rootAnimal):
         self.animalContainer.setRootNode(rootAnimal)
 
@@ -60,10 +58,19 @@ class InitGame:
             return False
 
     def showInfo(self):
-        print '-------------------------------'
         print 'Answer questions with Y/N'
-        print
-        
+
+    def giveUp(self, userAnswer, currentAnimal):
+        print 'Give up!'
+        animalType = raw_input('What type of animal was it: ')
+        animal = Animal(animalType)
+        animalQuestion = raw_input('Give a question for the animal: ')
+        animal.addQuestion(animalQuestion)
+        if userAnswer == 'N':
+            currentAnimal.setLeftLeaf(animal) # NO
+        else:
+            currentAnimal.setRightLeaf(animal) # YES
+    
 
 #-------------------
 # INIT GAME
@@ -77,21 +84,27 @@ inputOK = False
 
 gameRunning = True
 print 'Game running.'
+
 while gameRunning:
     game.showInfo()
+
+    # Ask question for current animal
     playerAnswer = raw_input(animal.getQuestion()).upper()
     inputOK = game.isPlayerAnswerOK(playerAnswer)
     while not (inputOK):
         game.showInfo()
         playerAnswer = raw_input(animal.getQuestion()).upper()
         inputOK = game.isPlayerAnswerOK(playerAnswer)
-        
-    correctOrFalse = animal.isAnswerCorrect(playerAnswer)
-    if correctOrFalse:
-        print 'Bingo'
+
+    # Check answer
+    if playerAnswer == 'J' or playerAnswer == 'Y':
+        animal.getRightLeaf() # YES
     else:
-        print 'Bummer'
-    gameRunning = False
+        animal.getLeftLeaf() # NO
+    
+    if animal.getAnimalType() == None:
+        game.giveUp()
+        gameRunning = False
 
 
 #-------------------
