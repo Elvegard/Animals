@@ -129,14 +129,16 @@ while gameRunning:
         if playerAnswer == 'J' or playerAnswer == 'Y':
             gameRunning = True
             game.loadGameData()
+            animal = game.getRootAnimal()
         else:
             gameRunning = False;
             (playerTry, playerWin, playerLose) = player.getPlayerStats()
+            print
             print '--------------------------------'
             print player.getPlayerName() + ' dine resultater:'
             print 'Forsoek: ' + str(playerTry)
             print 'Du vant: ' + str(playerWin)
-            print 'Du tapte: ' + str(playerLose)
+            print 'Jeg vant: ' + str(playerLose)
             print
                 
 
