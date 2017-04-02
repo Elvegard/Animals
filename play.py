@@ -9,10 +9,6 @@ class InitGame:
     animalContainer = None
     player = None
     
-    
-    def __init__(self):
-        print 'Animal guessing game'
-
     def initContainer(self):
         self.animalContainer = Container()
 
@@ -35,11 +31,9 @@ class InitGame:
             self.animalContainer = pickle.load(gameFile)
             gameFile.close()
         except:
-            print 'Creating new game data file'
+            print 'Lager ny fil med database for spillet'
             self.initContainer()
             self.animalContainer.initRoot()
-            #self.saveGame()
-
     def saveGame(self):
         gameFile = open('animals.dat', 'wb')
         pickle.dump(self.animalContainer,
@@ -58,18 +52,7 @@ class InitGame:
             return False
 
     def showInfo(self):
-        print 'Answer questions with Y/N'
-
-    def giveUp(self, userAnswer, currentAnimal):
-        print 'Give up!'
-        animalType = raw_input('What type of animal was it: ')
-        animal = Animal(animalType)
-        animalQuestion = raw_input('Give a question for the animal: ')
-        animal.addQuestion(animalQuestion)
-        if userAnswer == 'N':
-            currentAnimal.setLeftLeaf(animal) # NO
-        else:
-            currentAnimal.setRightLeaf(animal) # YES
+        print 'Svar med J/N'
 
     def getPlayerAnswer(self, question):
         playerAnswer = raw_input(question + '? ').upper()
@@ -80,7 +63,20 @@ class InitGame:
             inputOK = self.isPlayerAnswerOK(playerAnswer)
         return playerAnswer
 
+    def giveUp(self, previousAnimal, previousAnswer, player):
+        player.addPlayerWin()
+        animalType = raw_input('Hvilken type dyr var det? ')
+        animalQuestion = raw_input('Gi et spoersmaal for ' + animalType + ': ')
+        animal = Animal(animalType)
+        animal.setQuestion(animalQuestion)
+        if previousAnswer == 'N':
+            previousAnimal.setLeftLeaf(animal)
+        else:
+            previousAnimal.setRightLeaf(animal)                
 
+
+
+    
             
 #-------------------
 # INIT GAME
@@ -93,7 +89,10 @@ animal = game.getRootAnimal()
 inputOK = False
 
 gameRunning = True
-print 'Game running.'
+
+print '-----------------------------------'
+print '        Spillet starter'
+print '-----------------------------------'
 
 while gameRunning:
     game.showInfo()
@@ -111,29 +110,41 @@ while gameRunning:
 
     # No more animals, we must guess
     if animal == None:
+        player.addPlayerTry()
         gameRunning = False
-        question = 'Is it ' + str(previousAnimal.getAnimalType())
-        playerAnswer = game.getPlayerAnswer(question)
 
-        if playerAnswer == 'N':
-            print 'YOU WIN!'
-            animalType = raw_input('What animal was it? ')
-            animalQuestion = raw_input('Enter a question for ' + animalType + ': ')
-            animal = Animal(animalType)
-            animal.setQuestion(animalQuestion)
-
-            if previousAnswer == 'N':
-                previousAnimal.setLeftLeaf(animal)
-            else:
-                previousAnimal.setRightLeaf(animal)                
+        if previousAnswer == 'N':
+            print 'Jeg gir opp! :( '
+            game.giveUp(previousAnimal, previousAnswer, player)
         else:
-            print 'I WIN!'
+            question = 'Er det ' + str(previousAnimal.getAnimalType())
+            playerAnswer = game.getPlayerAnswer(question)
+            if playerAnswer == 'N':
+                game.giveUp(previousAnimal, previousAnswer, player)
+            else:
+                print 'Jeg vant!'
+
+        game.saveGame()
+        playerAnswer = game.getPlayerAnswer('Spille igjen')
+        if playerAnswer == 'J' or playerAnswer == 'Y':
+            gameRunning = True
+            game.loadGameData()
+        else:
+            gameRunning = False;
+            (playerTry, playerWin, playerLose) = player.getPlayerStats()
+            print '--------------------------------'
+            print player.getPlayerName() + ' dine resultater:'
+            print 'Forsoek: ' + str(playerTry)
+            print 'Du vant: ' + str(playerWin)
+            print 'Du tapte: ' + str(playerLose)
+            print
+                
+
 
 
 #-------------------
 # DONE
 #-------------------
-game.saveGame()
 print 'Done'
 
 

@@ -6,6 +6,7 @@ class Player:
     def __init__(self):
         playerName = raw_input('Navn: ')
         self.playerName = playerName
+        print
 
     def getPlayerName(self):
         return self.playerName
