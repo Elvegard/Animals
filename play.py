@@ -55,11 +55,11 @@ class InitGame:
         print 'Svar med J/N'
 
     def getPlayerAnswer(self, question):
-        playerAnswer = raw_input(question + '? ').upper()
+        playerAnswer = raw_input(question + '?').upper()
         inputOK = self.isPlayerAnswerOK(playerAnswer)
         while not (inputOK):
             self.showInfo()
-            playerAnswer = raw_input(animal.getQuestion()).upper()
+            playerAnswer = raw_input(animal.getQuestion() + '?').upper()
             inputOK = self.isPlayerAnswerOK(playerAnswer)
         return playerAnswer
 
@@ -93,10 +93,10 @@ gameRunning = True
 print '-----------------------------------'
 print '        Spillet starter'
 print '-----------------------------------'
+game.showInfo()
+
 
 while gameRunning:
-    game.showInfo()
-
     # Ask question for current animal
     playerAnswer = game.getPlayerAnswer(animal.getQuestion())
 
@@ -143,10 +143,5 @@ while gameRunning:
                 
 
 
-
-#-------------------
-# DONE
-#-------------------
-print 'Done'
 
 

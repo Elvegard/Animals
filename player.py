@@ -5,6 +5,8 @@ class Player:
 
     def __init__(self):
         playerName = raw_input('Navn: ')
+        if playerName == None or playerName == '':
+            playerName = 'NN'
         self.playerName = playerName
         print
 
