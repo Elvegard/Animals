@@ -38,7 +38,7 @@ class InitGame:
             print 'Creating new game data file'
             self.initContainer()
             self.animalContainer.initRoot()
-            self.saveGame()
+            #self.saveGame()
 
     def saveGame(self):
         gameFile = open('animals.dat', 'wb')
@@ -70,8 +70,18 @@ class InitGame:
             currentAnimal.setLeftLeaf(animal) # NO
         else:
             currentAnimal.setRightLeaf(animal) # YES
-    
 
+    def getPlayerAnswer(self, question):
+        playerAnswer = raw_input(question + '? ').upper()
+        inputOK = self.isPlayerAnswerOK(playerAnswer)
+        while not (inputOK):
+            self.showInfo()
+            playerAnswer = raw_input(animal.getQuestion()).upper()
+            inputOK = self.isPlayerAnswerOK(playerAnswer)
+        return playerAnswer
+
+
+            
 #-------------------
 # INIT GAME
 #-------------------
@@ -89,22 +99,35 @@ while gameRunning:
     game.showInfo()
 
     # Ask question for current animal
-    playerAnswer = raw_input(animal.getQuestion()).upper()
-    inputOK = game.isPlayerAnswerOK(playerAnswer)
-    while not (inputOK):
-        game.showInfo()
-        playerAnswer = raw_input(animal.getQuestion()).upper()
-        inputOK = game.isPlayerAnswerOK(playerAnswer)
+    playerAnswer = game.getPlayerAnswer(animal.getQuestion())
 
     # Check answer
+    previousAnimal = animal
     if playerAnswer == 'J' or playerAnswer == 'Y':
-        animal.getRightLeaf() # YES
+        animal = animal.getRightLeaf() # YES
     else:
-        animal.getLeftLeaf() # NO
-    
-    if animal.getAnimalType() == None:
-        game.giveUp()
+        animal = animal.getLeftLeaf() # NO
+    previousAnswer = playerAnswer
+
+    # No more animals, we must guess
+    if animal == None:
         gameRunning = False
+        question = 'Is it ' + str(previousAnimal.getAnimalType())
+        playerAnswer = game.getPlayerAnswer(question)
+
+        if playerAnswer == 'N':
+            print 'YOU WIN!'
+            animalType = raw_input('What animal was it? ')
+            animalQuestion = raw_input('Enter a question for ' + animalType + ': ')
+            animal = Animal(animalType)
+            animal.setQuestion(animalQuestion)
+
+            if previousAnswer == 'N':
+                previousAnimal.setLeftLeaf(animal)
+            else:
+                previousAnimal.setRightLeaf(animal)                
+        else:
+            print 'I WIN!'
 
 
 #-------------------

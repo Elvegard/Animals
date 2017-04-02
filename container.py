@@ -18,7 +18,7 @@ class Container:
         newAnimalName = raw_input('New animal type: ')
         newAnimal = Animal(newAnimalName)
         newQuestion = raw_input('New question: ')
-        newAnimal.addQuestion(newQuestion)
+        newAnimal.setQuestion(newQuestion)
         self.rootNode = newAnimal
 
         
