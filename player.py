@@ -4,7 +4,7 @@ class Player:
     playerWin = 0
 
     def __init__(self):
-        playerName = raw_input('Navn: ')
+        playerName = raw_input('Name: ')
         if playerName == None or playerName == '':
             playerName = 'NN'
         self.playerName = playerName

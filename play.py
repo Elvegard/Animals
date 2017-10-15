@@ -31,7 +31,7 @@ class InitGame:
             self.animalContainer = pickle.load(gameFile)
             gameFile.close()
         except:
-            print 'Lager ny fil med database for spillet'
+            print('Creating a new database file for the game.')
             self.initContainer()
             self.animalContainer.initRoot()
     def saveGame(self):
@@ -52,7 +52,7 @@ class InitGame:
             return False
 
     def showInfo(self):
-        print 'Svar med J/N'
+        print('Answer with Y/N')
 
     def getPlayerAnswer(self, question):
         playerAnswer = raw_input(question + '?').upper()
@@ -65,8 +65,8 @@ class InitGame:
 
     def giveUp(self, previousAnimal, previousAnswer, player):
         player.addPlayerWin()
-        animalType = raw_input('Hvilken type dyr var det? ')
-        animalQuestion = raw_input('Gi et spoersmaal for ' + animalType + ': ')
+        animalType = raw_input('What animal was it? ')
+        animalQuestion = raw_input('Enter a quiesting for the ' + animalType + ': ')
         animal = Animal(animalType)
         animal.setQuestion(animalQuestion)
         if previousAnswer == 'N':
@@ -91,7 +91,7 @@ inputOK = False
 gameRunning = True
 
 print '-----------------------------------'
-print '        Spillet starter'
+print '      Starting Animal Game'
 print '-----------------------------------'
 game.showInfo()
 
@@ -114,18 +114,18 @@ while gameRunning:
         gameRunning = False
 
         if previousAnswer == 'N':
-            print 'Jeg gir opp! :( '
+            print 'I give up! :( '
             game.giveUp(previousAnimal, previousAnswer, player)
         else:
-            question = 'Er det ' + str(previousAnimal.getAnimalType())
+            question = 'Is the anwer ' + str(previousAnimal.getAnimalType())
             playerAnswer = game.getPlayerAnswer(question)
             if playerAnswer == 'N':
                 game.giveUp(previousAnimal, previousAnswer, player)
             else:
-                print 'Jeg vant!'
+                print 'I win!'
 
         game.saveGame()
-        playerAnswer = game.getPlayerAnswer('Spille igjen')
+        playerAnswer = game.getPlayerAnswer('Play again?')
         if playerAnswer == 'J' or playerAnswer == 'Y':
             gameRunning = True
             game.loadGameData()
@@ -135,10 +135,10 @@ while gameRunning:
             (playerTry, playerWin, playerLose) = player.getPlayerStats()
             print
             print '--------------------------------'
-            print player.getPlayerName() + ' dine resultater:'
-            print 'Forsoek: ' + str(playerTry)
-            print 'Du vant: ' + str(playerWin)
-            print 'Jeg vant: ' + str(playerLose)
+            print player.getPlayerName() + ' your results:'
+            print 'Tries: ' + str(playerTry)
+            print 'You win: ' + str(playerWin)
+            print 'Compuer win: ' + str(playerLose)
             print
                 
 

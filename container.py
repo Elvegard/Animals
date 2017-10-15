@@ -15,10 +15,8 @@ class Container:
         self.rootNode = rootNode
 
     def initRoot(self):
-        #newAnimalName = raw_input('New animal type: ')
-        newAnimal = Animal('hund')
-        #newQuestion = raw_input('New question: ')
-        newAnimal.setQuestion('har den hale')
+        newAnimal = Animal('dog')
+        newAnimal.setQuestion('does it have a tale')
         self.rootNode = newAnimal
 
         
